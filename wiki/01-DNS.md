@@ -42,6 +42,8 @@ zone "bueno.lab" IN {
 ```
 
 **Figura 5.** Directivas globales del servicio BIND en `/etc/named.conf`.  
+
+![Figura 5 - evidencia original](../evidencias/figura-05.png)
 *Referencia: informe PDF original, página 3.*
 
 ### 2.2 Archivo de zona directa (bueno.lab.zone)
@@ -61,6 +63,8 @@ $TTL 86400
 @       IN NS  ns1.bueno.lab.
 @       IN A   10.0.2.15
 ns1     IN A   10.0.2.15
+
+![Figura 6 - evidencia original](../evidencias/figura-06.png)
 web     IN A   10.0.2.15
 ssh     IN A   10.0.2.15
 ```
@@ -75,6 +79,8 @@ Se validaron la configuración general y el archivo de zona con:
 ```bash
 sudo named-checkconf
 sudo named-checkzone bueno.lab /var/named/bueno.lab.zone
+
+![Figura 7 - evidencia original](../evidencias/figura-07.png)
 ```
 
 La validación de zona devolvió `OK` con el serial `2026112001`.
@@ -85,6 +91,8 @@ La validación de zona devolvió `OK` con el serial `2026112001`.
 ### 2.4 Estado operativo del servicio named
 
 Se habilitó el servicio en el arranque y se comprobó su estado:
+
+![Figura 8 - evidencia original](../evidencias/figura-08.png)
 
 ```bash
 sudo systemctl enable --now named
@@ -119,6 +127,8 @@ sudo firewall-cmd --list-all
 ### 4.1 Pruebas de resolución de nombres con dig
 
 Se realizaron consultas directas contra el servidor DNS local:
+
+![Figura 9 - evidencia original](../evidencias/figura-09.png)
 
 ```bash
 dig @127.0.0.1 bueno.lab
