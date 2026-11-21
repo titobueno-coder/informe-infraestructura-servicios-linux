@@ -36,6 +36,8 @@ sudo grep -n '^Port' /etc/ssh/sshd_config
 ```
 
 **Figura 16.** Verificación de la directiva `Port 2222` en `/etc/ssh/sshd_config`.  
+
+![Figura 16 - evidencia original](../evidencias/figura-16.png)
 *Referencia: informe PDF original, página 12.*
 
 ### 2.2 Validación de sintaxis y estado del demonio sshd
@@ -49,12 +51,16 @@ sudo systemctl status sshd
 
 La documentación fuente registra el servicio SSH activo y escuchando en el puerto personalizado.
 
+![Figura 17 - evidencia original](../evidencias/figura-17.png)
+
 **Figura 17.** Prueba de sintaxis y estado activo del servidor OpenSSH en el puerto 2222.  
 *Referencia: informe PDF original, página 12.*
 
 ### 2.3 Verificación de sockets activos en el puerto 2222
 
 Se inspeccionaron los sockets TCP en escucha:
+
+![Figura 18 - evidencia original](../evidencias/figura-18.png)
 
 ```bash
 sudo ss -tlnp | grep 2222
@@ -70,6 +76,8 @@ La evidencia confirma que `sshd` escucha en `0.0.0.0:2222` y `[::]:2222`.
 ### 3.1 Contexto de seguridad en SELinux
 
 Se verificó el modo de SELinux y la política de puertos:
+
+![Figura 19 - evidencia original](../evidencias/figura-19.png)
 
 ```bash
 getenforce
@@ -87,6 +95,8 @@ Se permitió el puerto SSH personalizado y se recargaron las reglas:
 
 ```bash
 sudo firewall-cmd --permanent --add-port=2222/tcp
+
+![Figura 20 - evidencia original](../evidencias/figura-20.png)
 sudo firewall-cmd --reload
 sudo firewall-cmd --list-all
 ```
@@ -101,6 +111,8 @@ El informe fuente muestra la zona activa `public`, con los servicios `dns`, `ftp
 ### 4.1 Prueba de acceso remoto SSH desde cliente Windows
 
 Desde Windows PowerShell se ejecutó la conexión utilizando el dominio y el puerto personalizado:
+
+![Figura 21 - evidencia original](../evidencias/figura-21.png)
 
 ```powershell
 ssh -p 2222 estudiantes@ssh.bueno.lab
