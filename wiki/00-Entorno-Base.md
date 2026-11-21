@@ -12,11 +12,15 @@ whoami
 ```
 
 **Figura 1.** Comprobación del nombre de host (`srv-bueno`) y usuario de sesión (`estudiantes`).  
+
+![Figura 1 - evidencia original](../evidencias/figura-01.png)
 *Referencia: informe PDF original, página 2.*
 
 ### 1.2 Configuración de interfaces de red
 
 Mediante `ip addr` se inspeccionaron las interfaces disponibles. Se verificó que la interfaz principal `enp0s3` estaba operativa y tenía asignada la dirección IPv4 `10.0.2.15/24`.
+
+![Figura 2 - evidencia original](../evidencias/figura-02.png)
 
 ```bash
 ip addr
@@ -30,6 +34,8 @@ ip addr
 Se realizó una prueba de conectividad hacia `8.8.8.8` mediante diez paquetes ICMP:
 
 ```bash
+
+![Figura 3 - evidencia original](../evidencias/figura-03.png)
 ping -c 10 8.8.8.8
 ```
 
@@ -41,6 +47,8 @@ El informe fuente registra una latencia promedio de 39.326 ms y describe la prue
 ### 1.4 Verificación de copias de seguridad
 
 Antes de modificar configuraciones de servicios se almacenaron copias originales en `/root/backups_interciclo/`. Se comprobó la existencia de los archivos `named.conf.original` y `sshd_config.original`.
+
+![Figura 4 - evidencia original](../evidencias/figura-04.png)
 
 ```bash
 sudo ls -lh /root/backups_interciclo/
