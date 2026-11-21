@@ -28,6 +28,8 @@ sudo systemctl status httpd
 El informe fuente registra el servicio `httpd.service` habilitado y en ejecución activa.
 
 **Figura 10.** Estado de ejecución del servidor Apache HTTP (`httpd.service`).  
+
+![Figura 10 - evidencia original](../evidencias/figura-10.png)
 *Referencia: informe PDF original, página 8.*
 
 ### 2.2 Verificación de cabeceras HTTP locales
@@ -40,6 +42,8 @@ curl -I http://localhost
 
 La respuesta registrada fue `HTTP/1.1 200 OK`, emitida por Apache/2.4.63 (CentOS Stream).
 
+![Figura 11 - evidencia original](../evidencias/figura-11.png)
+
 **Figura 11.** Respuesta HTTP 200 OK obtenida mediante `curl` hacia localhost.  
 *Referencia: informe PDF original, página 8.*
 
@@ -47,6 +51,8 @@ La respuesta registrada fue `HTTP/1.1 200 OK`, emitida por Apache/2.4.63 (CentOS
 
 Se comprobó la respuesta HTTP para el nombre web mediante resolución forzada hacia la dirección local:
 
+
+![Figura 12 - evidencia original](../evidencias/figura-12.png)
 ```bash
 curl -I --resolve web.bueno.lab:80:127.0.0.1 http://web.bueno.lab
 ```
@@ -59,6 +65,8 @@ La respuesta registrada fue `HTTP/1.1 200 OK`.
 ### 2.4 Estructura del documento web (index.html)
 
 Se inspeccionó el archivo principal alojado en `/var/www/html/index.html`. El documento contiene una página HTML5 personalizada titulada “CentOS Stream 10 | Adrian Bueno”, con estilos CSS y una clase para mostrar el logotipo.
+
+![Figura 13 - evidencia original](../evidencias/figura-13.png)
 
 ```bash
 sudo cat /var/www/html/index.html
@@ -77,6 +85,8 @@ La referencia del logotipo en el HTML es:
 
 Se comprobó la existencia y disponibilidad del archivo `logo.png` dentro del directorio de imágenes:
 
+![Figura 14 - evidencia original](../evidencias/figura-14.png)
+
 ```bash
 ls -lh /var/www/html/imagenes/
 curl -I http://localhost/imagenes/logo.png
@@ -85,6 +95,8 @@ curl -I http://localhost/imagenes/logo.png
 El informe fuente registra permisos de lectura para el archivo y una respuesta HTTP `200 OK` con tipo MIME `image/png`.
 
 **Figura 14.** Verificación de permisos y disponibilidad HTTP del recurso `logo.png`.  
+
+![Figura 15 - evidencia original](../evidencias/figura-15.png)
 *Referencia: informe PDF original, página 11.*
 
 ### 2.6 Visualización del sitio web en navegador
