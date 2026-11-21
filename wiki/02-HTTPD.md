@@ -1,8 +1,8 @@
-# 02 - Servicio HTTPD (Apache)
+# 02 - Despliegue y verificación del servidor web (Apache HTTPD)
 
-## 01. Arquitectura y requisitos
+## 1. Arquitectura y requisitos
 
-Se utilizó Apache HTTP Server en CentOS Stream 10 para publicar una página institucional personalizada.
+Se utilizó Apache HTTP Server en CentOS Stream 10 para publicar una página web personalizada.
 
 | Parámetro | Valor |
 |---|---|
@@ -11,36 +11,92 @@ Se utilizó Apache HTTP Server en CentOS Stream 10 para publicar una página ins
 | Puerto | `80/TCP` |
 | Directorio raíz | `/var/www/html` |
 | Página principal | `/var/www/html/index.html` |
-| Recurso gráfico | `/var/www/html/imagenes/logo.png` |
+| Logotipo institucional | `/var/www/html/imagenes/logo.png` |
 | Dominio utilizado en la prueba | `web.bueno.lab` |
 
-## 02. Despliegue y configuración
+## 2. Despliegue y configuración
 
-Se habilitó y arrancó Apache:
+### 2.1 Estado operativo del servicio httpd
+
+Se habilitó y arrancó Apache y se comprobó su estado:
 
 ```bash
 sudo systemctl enable --now httpd
 sudo systemctl status httpd
 ```
 
-La página principal `index.html` contiene una presentación de CentOS Stream 10, el nombre del estudiante Adrian Bueno y una descripción de los servicios trabajados. El logotipo institucional se almacena en `imagenes/logo.png` y se referencia desde el HTML mediante:
+El informe fuente registra el servicio `httpd.service` habilitado y en ejecución activa.
+
+**Figura 10.** Estado de ejecución del servidor Apache HTTP (`httpd.service`).  
+*Referencia: informe PDF original, página 8.*
+
+### 2.2 Verificación de cabeceras HTTP locales
+
+Se inspeccionaron los encabezados de respuesta del servidor web:
+
+```bash
+curl -I http://localhost
+```
+
+La respuesta registrada fue `HTTP/1.1 200 OK`, emitida por Apache/2.4.63 (CentOS Stream).
+
+**Figura 11.** Respuesta HTTP 200 OK obtenida mediante `curl` hacia localhost.  
+*Referencia: informe PDF original, página 8.*
+
+### 2.3 Verificación de resolución web para web.bueno.lab
+
+Se comprobó la respuesta HTTP para el nombre web mediante resolución forzada hacia la dirección local:
+
+```bash
+curl -I --resolve web.bueno.lab:80:127.0.0.1 http://web.bueno.lab
+```
+
+La respuesta registrada fue `HTTP/1.1 200 OK`.
+
+**Figura 12.** Validación de cabeceras HTTP para el dominio `web.bueno.lab`.  
+*Referencia: informe PDF original, página 9.*
+
+### 2.4 Estructura del documento web (index.html)
+
+Se inspeccionó el archivo principal alojado en `/var/www/html/index.html`. El documento contiene una página HTML5 personalizada titulada “CentOS Stream 10 | Adrian Bueno”, con estilos CSS y una clase para mostrar el logotipo.
+
+```bash
+sudo cat /var/www/html/index.html
+```
+
+La referencia del logotipo en el HTML es:
 
 ```html
 <img src="imagenes/logo.png" alt="Logo UCuenca Tec" class="logo">
 ```
 
-La estructura de recursos documentada es:
+**Figura 13.** Inspección del archivo principal `index.html` en el directorio raíz web.  
+*Referencia: informe PDF original, página 10.*
 
-```text
-/var/www/html/
-├── index.html
-└── imagenes/
-    └── logo.png
+### 2.5 Verificación de recursos estáticos (imágenes)
+
+Se comprobó la existencia y disponibilidad del archivo `logo.png` dentro del directorio de imágenes:
+
+```bash
+ls -lh /var/www/html/imagenes/
+curl -I http://localhost/imagenes/logo.png
 ```
 
-## 03. Seguridad SELinux y firewall
+El informe fuente registra permisos de lectura para el archivo y una respuesta HTTP `200 OK` con tipo MIME `image/png`.
 
-El servicio HTTP fue habilitado en firewalld y se recargaron las reglas:
+**Figura 14.** Verificación de permisos y disponibilidad HTTP del recurso `logo.png`.  
+*Referencia: informe PDF original, página 11.*
+
+### 2.6 Visualización del sitio web en navegador
+
+Se abrió `http://localhost` en un navegador gráfico. La evidencia muestra el logotipo institucional UCUENCATEC, la identificación del autor como ADRIAN BUENO y el encabezado de bienvenida a CentOS Stream 10.
+
+**Figura 15.** Renderizado final del portal web institucional en el navegador.  
+*Referencia: informe PDF original, página 11.*
+
+## 3. Seguridad SELinux y firewall
+
+Se habilitó el servicio HTTP en firewalld y se recargaron las reglas:
 
 ```bash
 sudo firewall-cmd --permanent --add-service=http
@@ -48,39 +104,17 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --list-services
 ```
 
-Se restauraron los contextos SELinux del contenido web:
+También se restauraron los contextos SELinux del contenido web:
 
 ```bash
 sudo restorecon -Rv /var/www/html/
+getenforce
 ```
 
-La práctica mantuvo SELinux en modo `Enforcing`.
+El estado de SELinux registrado en la práctica fue `Enforcing`.
 
-## 04. Pruebas de aceptación y solución de problemas
+## 4. Pruebas de aceptación y resultado
 
-Se comprobó la respuesta HTTP local:
+Las pruebas documentadas confirmaron respuestas HTTP satisfactorias tanto para `localhost` como para `web.bueno.lab`. También se verificó la disponibilidad del logotipo institucional y la visualización de la página personalizada.
 
-```bash
-curl -I http://localhost
-```
-
-La respuesta registrada fue `HTTP/1.1 200 OK`.
-
-También se probó el nombre web:
-
-```bash
-curl -I --resolve web.bueno.lab:80:127.0.0.1 http://web.bueno.lab
-```
-
-La respuesta fue igualmente `HTTP/1.1 200 OK`.
-
-Se verificó el recurso gráfico y sus permisos:
-
-```bash
-ls -lh /var/www/html/imagenes/
-curl -I http://localhost/imagenes/logo.png
-```
-
-El archivo `logo.png` fue servido con tipo MIME `image/png` y estado `200 OK`. Finalmente, se abrió `http://localhost` en el navegador para comprobar el logotipo, el nombre ADRIAN BUENO y el encabezado de bienvenida a CentOS Stream 10.
-
-**Evidencias descritas en el PDF:** figuras 10 a 15 (páginas 7 a 11).
+> **Nota sobre las imágenes:** las figuras 10–15 están identificadas en el PDF original, entre las páginas 8 y 11. Para mostrarlas incrustadas en GitHub, deben extraerse del PDF y subirse al repositorio como archivos de imagen independientes.
